@@ -19,17 +19,31 @@ The project provides a **web interface** where users can select source and desti
 ## Dataset
 
 The routes are stored in a CSV file `BusRoutes.csv` with the following format:
-
+```bash
 Source,Destination,Distance
 Agra,Delhi,240
 Delhi,Agra,240
 Agra,Mathura,60
 ...
+```
 
 
 You can expand the dataset with additional cities and intermediate routes to make the shortest path algorithm more interesting.
 
 ---
+
+### Project Structure
+```bash
+BusRouteOptimization/
+├── BusRoutePlanner.cpp
+├── BusRoutePlanner.h
+├── main.cpp
+├── app.py
+├── index.html
+├── BusRoutes.csv
+├── output.png
+└── README.md
+```
 
 ## Running the Project
 
@@ -63,19 +77,18 @@ Enter source and destination cities to get:
 
 ![Bus Route Shortest Path](output.png)
 
+Author
 
-###Project Structure
-```bash
-BusRouteOptimization/
-├── BusRoutePlanner.cpp
-├── BusRoutePlanner.h
-├── main.cpp
-├── app.py
-├── index.html
-├── BusRoutes.csv
-├── output.png
-└── README.md
-```
+Hymavathi Bonamsetty
+
+
+---
+
+If you want, I can also **modify `index.html`** to display the `output.png` dynamically on the page, not just in README. This way users can see the result directly in the web interface.  
+
+Do you want me to do that?
+
+
 
 
 
