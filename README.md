@@ -84,9 +84,7 @@ Hymavathi Bonamsetty
 
 ---
 
-If you want, I can also **modify `index.html`** to display the `output.png` dynamically on the page, not just in README. This way users can see the result directly in the web interface.  
 
-Do you want me to do that?
 
 
 
