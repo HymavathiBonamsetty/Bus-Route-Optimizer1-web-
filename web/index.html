@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bus Route Planner</title>
+<style>
+body { 
+    font-family: Arial; 
+    background:#f4f6f8; 
+    display:flex; 
+    flex-direction:column; 
+    align-items:center; 
+    padding:30px; 
+}
+h1 { color:#2c3e50; }
+.container {
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 4px 8px rgba(0,0,0,0.1);
+    max-width:400px;
+    width:100%;
+}
+label {
+    font-weight:bold;
+    display:block;
+    margin:10px 0 5px;
+}
+input, button {
+    width:100%;
+    padding:10px;
+    margin-bottom:15px;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+button {
+    background:#3498db;
+    color:white;
+    border:none;
+    font-size:16px;
+    cursor:pointer;
+}
+button:hover { background:#2980b9; }
+.result {
+    margin-top:20px;
+    background:#ecf0f1;
+    padding:15px;
+    border-radius:8px;
+}
+.result p { margin:5px 0; }
+.cities-list { background:#dff0d8; padding:10px; border-radius:8px; margin-top:15px; }
+</style>
+</head>
+<body>
+
+<h1>Bus Route Planner</h1>
+
+<div class="container">
+    <label>Source:</label>
+    <input type="text" id="src" placeholder="Type source city">
+
+    <label>Destination:</label>
+    <input type="text" id="dst" placeholder="Type destination city">
+
+    <button onclick="findRoute()">Find Route</button>
+
+    <div class="result" id="result" style="display:none;">
+        <p><b>Path:</b> <span id="path"></span></p>
+        <p><b>Total Distance:</b> <span id="distance"></span></p>
+        <p><b>Min Transfers:</b> <span id="transfers"></span></p>
+    </div>
+
+    <div class="cities-list" id="cities">
+        <p><b>Available Cities:</b> <span id="allcities">Loading...</span></p>
+    </div>
+</div>
+
+<script>
+// Load cities from Flask backend
+async function loadCities(){
+    try {
+        let res = await fetch("http://127.0.0.1:5000/cities");
+        let data = await res.json();
+        if(data.error) {
+            document.getElementById("allcities").innerText = "Error loading cities";
+        } else {
+            document.getElementById("allcities").innerText = data.join(", ");
+        }
+    } catch(e) {
+        document.getElementById("allcities").innerText = "Error connecting to server";
+    }
+}
+
+// Find shortest route
+async function findRoute(){
+    let src = document.getElementById("src").value.trim();
+    let dst = document.getElementById("dst").value.trim();
+
+    if(!src || !dst){
+        alert("Please enter both source and destination");
+        return;
+    }
+
+    try {
+        let res = await fetch(`http://127.0.0.1:5000/shortest?src=${encodeURIComponent(src)}&dst=${encodeURIComponent(dst)}`);
+        let data = await res.json();
+
+        if(data.error){
+            alert("Error: " + data.error);
+            return;
+        }
+
+        // Update result fields
+        document.getElementById("path").innerText = data.path || "N/A";
+        document.getElementById("distance").innerText = data.distance || "N/A";
+        document.getElementById("transfers").innerText = data.transfers || "N/A";
+        document.getElementById("result").style.display = "block";
+
+    } catch(e){
+        alert("Error connecting to server: " + e.message);
+    }
+}
+
+// Load cities on page load
+window.onload = loadCities;
+</script>
+
+</body>
+</html>
